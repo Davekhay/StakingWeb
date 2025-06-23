@@ -3,38 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>StakingWeb dApp</title>
+  <title>StakingWeb</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Ethers.js -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@6.7.0/dist/ethers.umd.min.js"></script>
-  <!-- Web3Modal Standalone -->
-  <script src="https://unpkg.com/@web3modal/standalone@3"></script>
 </head>
 <body>
-  <div class="background-overlay"></div>
-  <div class="container">
-    <h1>🪙 StakingWeb</h1>
-    <button id="connectBtn">🔗 Connect Wallet</button>
+  <nav>
+    <h1>StakingWeb</h1>
+    <button id="connectButton">Connect Wallet</button>
+  </nav>
 
-    <div class="card">
-      <h2>Stake ETH</h2>
-      <input type="number" id="stakeAmount" placeholder="Amount in ETH" />
-      <button id="stakeBtn">🚀 Stake</button>
-    </div>
+  <main>
+    <section class="hero">
+      <h2>Stake Your ETH & Earn Rewards</h2>
+      <p>Simple, secure, and EVM compatible.</p>
+    </section>
 
-    <div class="card">
-      <h2>Claim Rewards</h2>
-      <button id="claimBtn">🎁 Claim</button>
-    </div>
+    <section class="actions">
+      <input id="stakeAmount" type="number" placeholder="Amount in ETH" />
+      <button id="stakeBtn">Stake</button>
+      <button id="withdrawBtn">Withdraw</button>
+      <button id="claimBtn">Claim Rewards</button>
+    </section>
 
-    <div class="card">
-      <h2>Withdraw Stake</h2>
-      <button id="withdrawBtn">⬅️ Withdraw</button>
-    </div>
-
-    <p id="status" class="status"></p>
-  </div>
+    <div id="toast" class="toast"></div>
+    <div id="loading" class="loading">⏳ Processing...</div>
+  </main>
 
   <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3modal"></script>
+<script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+
 </body>
 </html>

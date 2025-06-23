@@ -1,8 +1,17 @@
-const projectId = "YOUR_PROJECT_ID_HERE"; 
-const contractAddress = "0x9662b7BbAFCc4c441149dc35071F38c9027489EB";  
+let provider;
+let web3Modal;
+let signer;
+let stakingContract;
 
-const contractABI = [
-  {
+const connectButton = document.getElementById("connectButton");
+const stakeBtn = document.getElementById("stakeBtn");
+const withdrawBtn = document.getElementById("withdrawBtn");
+const claimBtn = document.getElementById("claimBtn");
+const loading = document.getElementById("loading");
+const toast = document.getElementById("toast");
+
+const contractAddress = "0x9662b7BbAFCc4c441149dc35071F38c9027489EB";
+const abi = [  {
     "anonymous": false,
     "inputs": [
       { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
@@ -102,73 +111,120 @@ const contractABI = [
     ],
     "stateMutability": "view",
     "type": "function"
-  }
-];
+  }]
 
-const modal = new window.web3modal.default({
-  projectId,
-  walletConnectVersion: 2,
-  metadata: {
-    name: "StakingWeb",
-    description: "Stake ETH and earn rewards",
-    url: "https://your-site.com",
-    icons: ["https://your-site.com/logo.png"]
-  }
-});
+window.onload = async function () {
+  const providerOptions = {
+    walletconnect: {
+      package: window.WalletConnectProvider.default,
+      options: {
+        rpc: {
+          1: "https://sepolia.infura.io/v3/c52a3ae118ba4dc6b69dcaae19ff6be0",
+        },
+      },
+    },
+  };
 
-let provider, signer, contract;
+  web3Modal = new window.Web3Modal.default({
+    cacheProvider: false,
+    providerOptions,
+  });
+};
 
-async function connectWallet() {
+connectButton.onclick = async () => {
   try {
-    const connection = await modal.connect();
-    provider = new ethers.BrowserProvider(connection);
-    signer = await provider.getSigner();
-    contract = new ethers.Contract(contractAddress, contractABI, signer);
+    const instance = await web3Modal.connect();
+    provider = new ethers.providers.Web3Provider(instance);
+    signer = provider.getSigner();
 
-    document.getElementById("status").innerText = `✅ Connected: ${await signer.getAddress()}`;
+    const { chainId } = await provider.getNetwork();
+
+    if (chainId !== 11155111) {
+      try {
+        // Try to switch to Sepolia
+        await provider.send("wallet_switchEthereumChain", [{ chainId: "0xaa36a7" }]);
+      } catch (switchError) {
+        // If Sepolia isn't added, try adding it
+        if (switchError.code === 4902) {
+          try {
+            await provider.send("wallet_addEthereumChain", [
+              {
+                chainId: "0xaa36a7",
+                chainName: "Sepolia Testnet",
+                rpcUrls: ["https://sepolia.infura.io/v3/c52a3ae118ba4dc6b69dcaae19ff6be0"],
+                nativeCurrency: {
+                  name: "SepoliaETH",
+                  symbol: "ETH",
+                  decimals: 18
+                },
+                blockExplorerUrls: ["https://sepolia.etherscan.io"]
+              }
+            ]);
+          } catch (addError) {
+            showToast("❌ Failed to add Sepolia. Please add manually.");
+            return;
+          }
+        } else {
+          showToast("⚠️ Please switch to Sepolia network");
+          return;
+        }
+      }
+    }
+
+    stakingContract = new ethers.Contract(contractAddress, abi, signer);
+    const address = await signer.getAddress();
+    connectButton.innerText = `${address.slice(0, 6)}...${address.slice(-4)}`;
+    showToast("✅ Wallet Connected to Sepolia");
   } catch (err) {
     console.error(err);
-    alert("Wallet connection failed.");
+    showToast("❌ Wallet connection failed");
   }
-}
+};
 
-async function stakeTokens() {
+
+stakeBtn.onclick = async () => {
   const amount = document.getElementById("stakeAmount").value;
-  if (!amount) return alert("Enter a valid amount");
-
+  if (!amount) return showToast("Enter amount first");
   try {
-    const tx = await contract.stake({ value: ethers.parseEther(amount) });
+    loading.style.display = "block";
+    const tx = await stakingContract.stake({ value: ethers.utils.parseEther(amount) });
     await tx.wait();
-    document.getElementById("status").innerText = `✅ Staked ${amount} ETH`;
+    showToast("✅ Staked successfully!");
   } catch (err) {
-    console.error(err);
-    document.getElementById("status").innerText = "❌ Stake failed";
+    showToast("❌ " + err.message);
+  } finally {
+    loading.style.display = "none";
   }
-}
+};
 
-async function claimRewards() {
+withdrawBtn.onclick = async () => {
   try {
-    const tx = await contract.claimRewards();
+    loading.style.display = "block";
+    const tx = await stakingContract.withdrawStake();
     await tx.wait();
-    document.getElementById("status").innerText = "✅ Rewards claimed!";
+    showToast("✅ Withdrawn successfully!");
   } catch (err) {
-    console.error(err);
-    document.getElementById("status").innerText = "❌ Claim failed";
+    showToast("❌ " + err.message);
+  } finally {
+    loading.style.display = "none";
   }
-}
+};
 
-async function withdrawStake() {
+claimBtn.onclick = async () => {
   try {
-    const tx = await contract.withdrawStake();
+    loading.style.display = "block";
+    const tx = await stakingContract.claimRewards();
     await tx.wait();
-    document.getElementById("status").innerText = "✅ Stake withdrawn!";
+    showToast("✅ Rewards claimed!");
   } catch (err) {
-    console.error(err);
-    document.getElementById("status").innerText = "❌ Withdraw failed";
+    showToast("❌ " + err.message);
+  } finally {
+    loading.style.display = "none";
   }
-}
+};
 
-document.getElementById("connectBtn").onclick = connectWallet;
-document.getElementById("stakeBtn").onclick = stakeTokens;
-document.getElementById("claimBtn").onclick = claimRewards;
-document.getElementById("withdrawBtn").onclick = withdrawStake;
+function showToast(message) {
+  toast.textContent = message;
+  toast.style.display = "block";
+  setTimeout(() => (toast.style.display = "none"), 4000);
+}
