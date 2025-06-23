@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StakingWeb dApp</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Ethers.js -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.7.0/dist/ethers.umd.min.js"></script>
+  <!-- Web3Modal Standalone -->
+  <script src="https://unpkg.com/@web3modal/standalone@3"></script>
+</head>
+<body>
+  <div class="background-overlay"></div>
+  <div class="container">
+    <h1>🪙 StakingWeb</h1>
+    <button id="connectBtn">🔗 Connect Wallet</button>
+
+    <div class="card">
+      <h2>Stake ETH</h2>
+      <input type="number" id="stakeAmount" placeholder="Amount in ETH" />
+      <button id="stakeBtn">🚀 Stake</button>
+    </div>
+
+    <div class="card">
+      <h2>Claim Rewards</h2>
+      <button id="claimBtn">🎁 Claim</button>
+    </div>
+
+    <div class="card">
+      <h2>Withdraw Stake</h2>
+      <button id="withdrawBtn">⬅️ Withdraw</button>
+    </div>
+
+    <p id="status" class="status"></p>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

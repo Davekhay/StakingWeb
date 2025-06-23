@@ -1,0 +1,70 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #0a0f1a;
+  color: #fff;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.background-overlay {
+  background: url('https://images.unsplash.com/photo-1611078489935-170140f297b2?auto=format&fit=crop&w=1920&q=80') no-repeat center center / cover;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.2;
+  filter: blur(4px);
+}
+
+.container {
+  max-width: 500px;
+  margin: 60px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #2c2f3a;
+  padding: 20px;
+  border-radius: 16px;
+  margin: 20px 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+input[type="number"] {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #1a1f2c;
+  color: white;
+  font-size: 1rem;
+}
+
+button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  background-color: #4f46e5;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #3730a3;
+}
+
+.status {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #00ff95;
+}
