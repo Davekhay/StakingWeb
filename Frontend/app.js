@@ -1,7 +1,6 @@
 const projectId = "YOUR_PROJECT_ID_HERE"; 
 const contractAddress = "0x9662b7BbAFCc4c441149dc35071F38c9027489EB";  
 
-// Paste full ABI here or import from abi.js if you prefer
 const contractABI = [
   {
     "anonymous": false,
