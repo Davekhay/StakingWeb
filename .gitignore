@@ -1,1 +1,37 @@
+# === General ===
+.DS_Store
+Thumbs.db
+
+# === Node / frontend assets ===
+node_modules/
+dist/
+build/
+.cache/
+
+# === Foundry (Forge) ===
+out/
+lib/
+cache/
+broadcast/
+
+# === Environment / secrets ===
 .env
+.env.local
+.secrets.toml
+foundry.toml  # optional if you keep RPC/private keys in it
+
+# === System files ===
+*.log
+*.pid
+
+# === IDE-specific ===
+.vscode/
+.idea/
+*.code-workspace
+
+# === OS-specific ===
+*.swp
+*.swo
+*.bak
+*.tmp
+
