@@ -69,7 +69,7 @@ $ cast --help
 
 # 🪙 StakingWeb
 
-**StakingWeb** is a decentralized staking dApp that allows users to stake ERC-20 tokens and earn rewards based on the duration of their stake. Built with Solidity using the Foundry framework, and paired with a lightweight web frontend in HTML, CSS, and JavaScript.
+**StakingWeb** is a decentralized staking dApp that allows users to stake ERC-20 tokens and earn rewards based on the duration of their stake. Built with Solidity using the Foundry framework.
 
 ---
 
@@ -79,15 +79,12 @@ $ cast --help
 - ⏱️ Rewards accrue over time based on staking duration
 - 💰 Claim rewards or withdraw at any time
 - 🧪 Smart contract tested using Foundry
-- 🌐 Web interface for interaction via MetaMask
 
 ---
 
 ## 🧰 Tech Stack
 
 - **Smart Contracts:** Solidity, Foundry
-- **Frontend:** HTML, CSS, JavaScript
-- **Wallet Integration:** MetaMask
 - **Network:** Ethereum Sepolia Testnet
 - **Optional:** Chainlink Price Feeds
 
